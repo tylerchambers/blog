@@ -1,7 +1,8 @@
 ---
 import { render } from 'astro:content';
+import TagList from '../../components/TagList.astro';
 import { SITE } from '../../config/site';
-import { formatPostDate, getPublishedPosts, type BlogPost } from '../../lib/posts';
+import { formatPostDate, getPostTags, getPublishedPosts, type BlogPost } from '../../lib/posts';
 import Layout from '../../layouts/Layout.astro';
 
 export async function getStaticPaths() {
@@ -27,6 +28,7 @@ const published = formatPostDate(post);
     <p><a href="/">← index</a></p>
     <h1>{post.data.title}</h1>
     <time datetime={post.data.pubDate.toISOString()}>{published}</time>
+    <TagList tags={getPostTags(post)} label={`Tags for ${post.data.title}`} />
     <Content />
   </article>
 </Layout>

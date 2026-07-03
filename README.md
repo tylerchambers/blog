@@ -46,7 +46,22 @@ Required fields:
 
 Optional fields:
 
-- `draft: true`: hides the post from the index and prevents a static route from being generated.
+- `tags`: list of labels that group related posts. Each tag links to a static page at `/tags/<tag-slug>/`.
+- `draft: true`: hides the post from the index, tag pages, and static blog routes.
+
+Example tagged post:
+
+```md
+---
+title: Part 1: Designing the cache
+pubDate: 2026-07-03
+tags:
+  - Cache series
+  - Systems
+---
+
+This post appears on `/tags/cache-series/` and `/tags/systems/`.
+```
 
 Example draft:
 

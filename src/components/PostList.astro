@@ -1,5 +1,6 @@
 ---
-import { formatPostDate, getPostHref, type BlogPost } from '../lib/posts';
+import TagList from './TagList.astro';
+import { formatPostDate, getPostHref, getPostTags, type BlogPost } from '../lib/posts';
 
 interface Props {
   posts: readonly BlogPost[];
@@ -17,6 +18,7 @@ const { posts } = Astro.props;
         <li>
           <time datetime={post.data.pubDate.toISOString()}>{formatPostDate(post)}</time>{' '}
           <a href={getPostHref(post)}>{post.data.title}</a>
+          <TagList tags={getPostTags(post)} label={`Tags for ${post.data.title}`} />
         </li>
       ))}
     </ul>
