@@ -1,0 +1,24 @@
+---
+import { formatPostDate, getPostHref, type BlogPost } from '../lib/posts';
+
+interface Props {
+  posts: readonly BlogPost[];
+}
+
+const { posts } = Astro.props;
+---
+
+{
+  posts.length === 0 ? (
+    <p>No notes yet.</p>
+  ) : (
+    <ul class="post-list">
+      {posts.map((post) => (
+        <li>
+          <time datetime={post.data.pubDate.toISOString()}>{formatPostDate(post)}</time>{' '}
+          <a href={getPostHref(post)}>{post.data.title}</a>
+        </li>
+      ))}
+    </ul>
+  )
+}

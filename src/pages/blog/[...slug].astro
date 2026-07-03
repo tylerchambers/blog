@@ -1,0 +1,32 @@
+---
+import { render } from 'astro:content';
+import { SITE } from '../../config/site';
+import { formatPostDate, getPublishedPosts, type BlogPost } from '../../lib/posts';
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  const posts = await getPublishedPosts();
+
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+interface Props {
+  post: BlogPost;
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const published = formatPostDate(post);
+---
+
+<Layout title={`${post.data.title} — ${SITE.name}`} description={SITE.description}>
+  <article>
+    <p><a href="/">← index</a></p>
+    <h1>{post.data.title}</h1>
+    <time datetime={post.data.pubDate.toISOString()}>{published}</time>
+    <Content />
+  </article>
+</Layout>

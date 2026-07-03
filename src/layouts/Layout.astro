@@ -1,0 +1,165 @@
+---
+import { SITE } from '../config/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title = SITE.name, description = SITE.description } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+    <style is:global>
+      html {
+        color-scheme: light;
+      }
+
+      body {
+        margin: 0;
+        background: #fffff8;
+        color: #111;
+        font-family: Georgia, 'Times New Roman', Times, serif;
+        font-size: 18px;
+        line-height: 1.55;
+      }
+
+      main {
+        max-width: 42rem;
+        margin: 4rem auto;
+        padding: 0 1.25rem;
+      }
+
+      header {
+        border-bottom: 1px solid #111;
+        margin-bottom: 2rem;
+        padding-bottom: 0.75rem;
+      }
+
+      h1,
+      h2,
+      h3 {
+        font-weight: normal;
+        line-height: 1.2;
+      }
+
+      h1 {
+        font-size: 2rem;
+        margin: 0 0 0.25rem;
+      }
+
+      h2 {
+        font-size: 1.35rem;
+        margin-top: 2rem;
+      }
+
+      a {
+        color: #0000aa;
+        text-decoration: underline;
+      }
+
+      a:visited {
+        color: #551a8b;
+      }
+
+      p,
+      ul,
+      ol,
+      pre,
+      blockquote {
+        margin: 1rem 0;
+      }
+
+      ul,
+      ol {
+        padding-left: 1.4rem;
+      }
+
+      time {
+        color: #555;
+        font-size: 0.9rem;
+        font-variant-numeric: tabular-nums;
+      }
+
+      code,
+      pre {
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 0.95em;
+      }
+
+      pre {
+        overflow-x: auto;
+        border: 1px solid #999;
+        background: #fff;
+        padding: 0.75rem;
+      }
+
+      .code-block {
+        margin: 1rem 0;
+      }
+
+      .code-block__title {
+        border: 1px solid #999;
+        border-bottom: 0;
+        background: #f7f7ef;
+        color: #333;
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 0.85rem;
+        padding: 0.35rem 0.75rem;
+      }
+
+      .code-block pre {
+        margin: 0;
+      }
+
+      .code-block--line-numbers code {
+        counter-reset: code-line;
+      }
+
+      .code-block--line-numbers .line {
+        counter-increment: code-line;
+        display: inline-block;
+        min-width: 100%;
+      }
+
+      .code-block--line-numbers .line::before {
+        content: counter(code-line);
+        display: inline-block;
+        width: 2.5ch;
+        margin-right: 1rem;
+        padding-right: 0.75rem;
+        border-right: 1px solid #ddd;
+        color: #777;
+        text-align: right;
+        user-select: none;
+      }
+
+      blockquote {
+        border-left: 1px solid #777;
+        color: #333;
+        margin-left: 0;
+        padding-left: 1rem;
+      }
+
+      .post-list {
+        list-style: none;
+        padding-left: 0;
+      }
+
+      .post-list li {
+        margin: 0.4rem 0;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <slot />
+    </main>
+  </body>
+</html>
