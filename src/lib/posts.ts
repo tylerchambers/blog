@@ -1,6 +1,12 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
+import { BlogTag } from './tags';
 
 export type BlogPost = CollectionEntry<'blog'>;
+
+export type TaggedPosts = {
+  readonly tag: BlogTag;
+  readonly posts: readonly BlogPost[];
+};
 
 function isPublished(post: BlogPost): boolean {
   return post.data.draft !== true;
@@ -22,4 +28,19 @@ export function formatPostDate(post: BlogPost): string {
 
 export function getPostHref(post: BlogPost): string {
   return `/blog/${post.id}/`;
+}
+
+export function getPostTags(post: BlogPost): BlogTag[] {
+  return BlogTag.fromNames(post.data.tags);
+}
+
+export function getAllPostTags(posts: readonly BlogPost[]): BlogTag[] {
+  return BlogTag.fromNames(posts.flatMap((post) => post.data.tags));
+}
+
+export function getTaggedPosts(posts: readonly BlogPost[], tag: BlogTag): TaggedPosts {
+  return {
+    tag,
+    posts: posts.filter((post) => getPostTags(post).some((postTag) => postTag.equals(tag))),
+  };
 }

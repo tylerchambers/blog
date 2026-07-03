@@ -1,0 +1,20 @@
+---
+import type { BlogTag } from '../lib/tags';
+
+interface Props {
+  tags: readonly BlogTag[];
+  label?: string;
+}
+
+const { tags, label = 'Tags' } = Astro.props;
+---
+
+{
+  tags.length > 0 && (
+    <p class="tag-list" aria-label={label}>
+      {tags.map((tag) => (
+        <a href={tag.href}>{tag.name}</a>
+      ))}
+    </p>
+  )
+}

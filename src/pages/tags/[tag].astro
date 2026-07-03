@@ -1,0 +1,37 @@
+---
+import PostList from '../../components/PostList.astro';
+import { SITE } from '../../config/site';
+import {
+  getAllPostTags,
+  getPublishedPosts,
+  getTaggedPosts,
+  type TaggedPosts,
+} from '../../lib/posts';
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  const posts = await getPublishedPosts();
+
+  return getAllPostTags(posts).map((tag) => ({
+    params: { tag: tag.slug },
+    props: { taggedPosts: getTaggedPosts(posts, tag) },
+  }));
+}
+
+interface Props {
+  taggedPosts: TaggedPosts;
+}
+
+const { taggedPosts } = Astro.props;
+const title = `${taggedPosts.tag.name} — ${SITE.name}`;
+---
+
+<Layout title={title} description={SITE.description}>
+  <header>
+    <p><a href="/">← index</a></p>
+    <h1>{taggedPosts.tag.name}</h1>
+    <p>Posts tagged {taggedPosts.tag.name}.</p>
+  </header>
+
+  <PostList posts={taggedPosts.posts} />
+</Layout>
