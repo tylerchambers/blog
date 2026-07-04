@@ -5,13 +5,14 @@ pubDate: 2026-07-03
 
 **Dependency injection** is when an object receives its required dependencies from an external source rather than creating them itself. That's it. That's the whole idea. 
 
-When discussing dependency injection, many online and in the workplace get entirely too bogged down with concepts like containers, decorators, providers, service registries, cradles, modules, and framework-specific trivialities. All of these tools can be useful! But they aren't the main idea. 
+When discussing dependency injection, many people online and in the workplace get entirely too bogged down with concepts like containers, decorators, providers, service registries, cradles, modules, and framework-specific trivialities. All of these tools can be useful! But they aren't the main idea.
 
 When you distill dependency injection down to its essence and realize it's the measured practice of:
 - making your dependencies explicit
 - isolating external systems behind narrow contracts
 - providing implementations that can be swapped depending on the environment
-it becomes much clearer how you can apply this concept and begin writing better, more robust code.
+
+Then it becomes much clearer how you can apply this concept and begin writing better, more robust code.
 
 **A codebase does not become better because every class has an interface or because construction has been hidden inside a framework. It becomes better when important boundaries are explicit and controlled.**
 
@@ -23,9 +24,9 @@ Dependency injection is not a framework pattern. The core idea is not "use a DI 
 
 **A seam is anywhere one implementation can be replaced with another without changing the code that depends on it.** In practice, that means a service can use one implementation in production, another in tests, and another during local development. 
 
-Containers and libraries are optional in DI, a seam is not.
+Containers and libraries are optional in DI; a seam is not.
 
-Many teams reject DI after only seeing the heaviest possible version. Magical frameworks and decorators with hidden object graphs and indirect debugging. Thankfully, none of that is essential. Plain constructors, functions, and modules are enough to get most of the value.
+Many teams reject DI after only seeing the heaviest possible version: magical frameworks and decorators with hidden object graphs and indirect debugging. Thankfully, none of that is essential. Plain constructors, functions, and modules are enough to get most of the value.
 
 ## A Practical Example
 
@@ -112,12 +113,12 @@ This is a lot of test code for a function whose behavior is conceptually simple!
 
 This example is perfectly functional, but raises some questions. 
 1) How can we test that this does what we expect?
-	1) Right now, our tests are basically "did we call the S3 client." That's pretty brittle and resists refactoring.
-2) If I'm developing on my local machine, do I need S3 credentials, or a mock s3 store?
-3) What if something changes later, and we need to upload to a blobstore that isn't S3?
-	1) Admittedly, this is a pretty trivial change with this version, I will leave a non-trivial example to the reader. I'm sure you've seen them.
+	1) Right now, our tests are basically "did we call the S3 client?" That's pretty brittle and resists refactoring.
+2) If I'm developing on my local machine, do I need S3 credentials, or a mock S3 store?
+3) What if something changes later, and we need to upload to a blob store that isn't S3?
+	1) Admittedly, this is a pretty trivial change with this version; I will leave a non-trivial example to the reader. I'm sure you've seen them.
 
-All of those questions are difficult to answer cleanly because we have no seam. Where might we be able to create them?
+All of those questions are difficult to answer cleanly because we have no seam. Where might we be able to create one?
 
 If you recall from above:
 
@@ -202,7 +203,7 @@ The application behavior we actually care about is simpler:
 
 > When publishing a report, store the report body at the correct report key.
 
-That statement doesn't mention S3, it doesn't mention buckets, it doesn't mention `PutObjectCommand`.
+That statement doesn't mention S3; it doesn't mention buckets; it doesn't mention `PutObjectCommand`.
 
 I would argue the real dependency is not `S3Client`. 
 
@@ -309,7 +310,7 @@ class InMemoryBlobStore implements BlobStore {
 
 ```
 
-**This is completely reusable, any test that needs a `BlobStore` can use the same fake without mocking the AWS SDK!**
+**This is completely reusable; any test that needs a `BlobStore` can use the same fake without mocking the AWS SDK!**
 
 This fake is also worth testing directly:
 
