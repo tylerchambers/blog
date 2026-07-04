@@ -8,8 +8,11 @@ const posts = await getPublishedPosts();
 ---
 
 <Layout title={SITE.name} description={SITE.description}>
-  <header>
-    <h1>{SITE.name}</h1>
+  <header class="site-header">
+    <div class="site-header__top">
+      <h1>{SITE.name}</h1>
+      <a href="https://tally.so/r/XxyLlz">Contact</a>
+    </div>
     <p>{SITE.tagline}</p>
   </header>
 
