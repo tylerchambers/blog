@@ -9,11 +9,13 @@ const posts = await getPublishedPosts();
 
 <Layout title={SITE.name} description={SITE.description}>
   <header class="site-header">
-    <div class="site-header__top">
-      <h1>{SITE.name}</h1>
-      <a href="https://tally.so/r/XxyLlz">Contact</a>
-    </div>
+    <h1>{SITE.name}</h1>
     <p>{SITE.tagline}</p>
+    <nav class="site-header__links" aria-label="Profile links">
+      <a href="https://tally.so/r/XxyLlz">Contact</a>
+      <a href="https://github.com/tylerchambers">Github</a>
+      <a href="https://www.linkedin.com/in/tyler-chambers1/">LinkedIn</a>
+    </nav>
   </header>
 
   <section aria-labelledby="writing">

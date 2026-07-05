@@ -7,5 +7,5 @@ export type SiteConfig = {
 export const SITE = {
   name: 'Tyler Chambers',
   description: 'Software notes.',
-  tagline: 'Occasional essays and technical notes.',
+  tagline: 'Occasional essays and other technical notes.',
 } satisfies SiteConfig;
