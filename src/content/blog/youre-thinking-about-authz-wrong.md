@@ -1,5 +1,5 @@
 ---
-title: You're Thinking About Authn Wrong 
+title: You're Thinking About AuthZ Wrong
 pubDate: 2026-07-05
 ---
 
@@ -155,7 +155,7 @@ document.viewer =
 
 That is the whole move, and it scales!
 
-Once you model authn this way, you stop translating normal product language into increasingly complex conditionals. The statement “everyone in this group can see everything in that folder except Steve” can stay recognizably itself all the way down into the authorization layer.
+Once you model authorization this way, you stop translating normal product language into increasingly complex conditionals. The statement “everyone in this group can see everything in that folder except Steve” can stay recognizably itself all the way down into the authorization layer.
 
 That is a good sign. The model matches the way people already talk and think about authorization.
 

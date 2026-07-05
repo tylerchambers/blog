@@ -65,4 +65,7 @@ export default defineConfig({
       ],
     },
   },
+  redirects: {
+    '/blog/youre-thinking-about-auth-wrong/': '/blog/youre-thinking-about-authz-wrong/',
+  },
 });
