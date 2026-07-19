@@ -1,47 +1,45 @@
 ---
-title: Patching and Mocking Are a Smell
+title: Patching and Mocking Are Usually a Smell
 pubDate: 2026-07-19
 ---
 
-Patching and mocking are useful tools. They are not always bad.
+Patching and mocking are useful. They are also overused.
 
-But when a test needs extensive patching or mocking, the design often has a problem.
+A large mock setup is often treated as evidence that the code is well isolated. Frequently it proves the opposite. The test needs to reach inside the program, replace hidden dependencies, and assert internal call sequences because the design did not provide a clean seam in the first place.
 
-The test is telling you that the code has no clear seam.
+There are three common failure modes.
 
-This post covers three common problems.
+## 1. Patching Usually Means the Dependency Is Hidden
 
-## 1. Patching Hides Dependencies
-
-Consider this function:
+Consider a function that reads directly from the file system:
 
 ```ts
 import { readFile } from "node:fs/promises";
 
 export async function loadConfig(): Promise<string> {
-  return await readFile("./config.json", "utf8");
+  return readFile("./config.json", "utf8");
 }
 ```
 
-A test can patch `readFile`. But the function still hides its dependency.
+The obvious test patches `readFile`.
 
-The file system is not visible in the function signature. A reader cannot see that the function performs I/O.
+That works, but the test is compensating for the design. Nothing in the function signature tells the caller that this function performs I/O. The dependency exists, but it is hidden inside the module.
 
-A patch-based test can work, but it depends on module behavior and import details.
-
-A clearer design makes the dependency explicit:
+Make it explicit instead:
 
 ```ts
 export interface FileReader {
   read(path: string): Promise<string>;
 }
 
-export async function loadConfig(files: FileReader): Promise<string> {
-  return await files.read("./config.json");
+export async function loadConfig(
+  files: FileReader,
+): Promise<string> {
+  return files.read("./config.json");
 }
 ```
 
-The test is now simple:
+The test becomes ordinary:
 
 ```ts
 import { expect, test } from "bun:test";
@@ -59,13 +57,11 @@ test("loads the config file", async () => {
 });
 ```
 
-The dependency is visible. The test does not need a patch.
+No patching. No import tricks. The dependency is visible where it belongs.
 
-## 2. Mock-Heavy Tests Copy the Implementation
+## 2. Mock-Heavy Tests Often Reimplement the Function
 
-A mock often checks how the code works instead of what the code does.
-
-Consider this test:
+Mocking is especially dangerous when the test asserts every interaction:
 
 ```ts
 import { expect, mock, test } from "bun:test";
@@ -85,13 +81,11 @@ test("creates a user", async () => {
 });
 ```
 
-This test knows the exact call sequence and the exact internal steps.
+This test does not merely check that a user was created. It encodes the current algorithm: first query, then insert, with these exact calls.
 
-A valid refactor can break the test even when the behavior does not change.
+That distinction matters. The implementation could later use an atomic `insertIfAbsent` operation. The behavior would remain correct, but the test would fail because it was coupled to the old implementation.
 
-For example, the implementation can use an atomic `insertIfAbsent` operation. The result is the same, but the mock-based test fails.
-
-Prefer tests that check an observable result:
+Prefer a small in-memory implementation and assert the result:
 
 ```ts
 test("creates a user", async () => {
@@ -104,29 +98,29 @@ test("creates a user", async () => {
 });
 ```
 
-This test checks behavior. It does not copy the implementation.
+This test checks behavior. It does not duplicate the internals of the function under test.
 
-## 3. Patching Often Means That the Code Has No Seam
+## 3. Patching Creates a Seam After the Fact
 
-A seam is a place where you can change behavior without changing the code under test.
+A seam is a place where behavior can vary without editing the code under test.
 
-Patching creates a temporary seam at test time.
+Patching creates that seam dynamically at test time. That is useful when working with legacy code or a hostile third-party API. It is a poor default for code you control.
 
-That can be useful for legacy code. It is less useful as the main design method.
-
-Consider this function:
+Consider this:
 
 ```ts
-export async function sendWelcomeEmail(email: string): Promise<void> {
+export async function sendWelcomeEmail(
+  email: string,
+): Promise<void> {
   const user = await db.users.findByEmail(email);
   const message = renderWelcomeEmail(user);
   await mailer.send(message);
 }
 ```
 
-The function depends on global objects. A test must patch `db`, `mailer`, or both.
+A test must patch `db`, `mailer`, or both because the function reaches into global state.
 
-A better design accepts a small set of collaborators:
+The better version is not complicated:
 
 ```ts
 export interface WelcomeDeps {
@@ -148,22 +142,20 @@ export async function sendWelcomeEmail(
 }
 ```
 
-This does not require a large dependency injection framework.
+This is dependency injection in the useful sense of the term: pass the thing the function needs. No framework is required.
 
-It only requires an explicit seam.
+## The Rule
 
-## A Practical Rule
+Use patching when you are trapped by legacy code, global APIs, time, randomness, or a dependency you cannot reasonably wrap.
 
-Use patching and mocking when you must isolate legacy code, third-party code, time, randomness, or a difficult system boundary.
+Do not make it your default testing strategy.
 
-Do not use them as the default test design.
+When a test needs several patches or a long list of interaction assertions, the problem is often one of these:
 
-When a test needs many patches or many interaction assertions, ask three questions:
+1. The code hides a dependency.
+2. The test is coupled to the implementation.
+3. The design lacks a usable seam.
 
-1. Does the code hide a dependency?
-2. Does the test copy the implementation?
-3. Does the code need a clearer seam?
+In those cases, the answer is usually not a more sophisticated mock.
 
-In many cases, the best fix is not a better mock.
-
-The best fix is a better boundary.
+It is a better boundary.
