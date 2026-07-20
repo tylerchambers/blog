@@ -8,7 +8,10 @@ const CODE_BLOCK_LINE_NUMBERS_DISABLED_PATTERN =
 export default defineConfig({
   markdown: {
     shikiConfig: {
-      theme: 'github-light',
+      themes: {
+        light: 'github-light',
+        dark: 'github-dark',
+      },
       transformers: [
         {
           name: 'code-block-metadata',
