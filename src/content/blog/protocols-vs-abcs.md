@@ -1,5 +1,6 @@
 ---
 title: Protocols vs. ABCs
+description: When to prefer Python protocols for structural typing and when abstract base classes offer clearer runtime guarantees and deliberate membership.
 pubDate: 2026-07-12
 ---
 

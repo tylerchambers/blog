@@ -1,5 +1,6 @@
 ---
 title: Patching and Mocking Are Usually a Smell
+description: Heavy patching and mock setup often reveal hidden dependencies; explicit seams produce simpler designs and more meaningful tests.
 pubDate: 2026-07-19
 ---
 
