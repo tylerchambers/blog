@@ -16,6 +16,18 @@ const { title = SITE.name, description = SITE.description } = Astro.props;
     <meta name="viewport" content="width=device-width" />
     <meta name="description" content={description} />
     <title>{title}</title>
+    <script is:inline>
+      (() => {
+        try {
+          const theme = localStorage.getItem('theme');
+          if (theme === 'light' || theme === 'dark') {
+            document.documentElement.dataset.theme = theme;
+          }
+        } catch {
+          // The system preference remains the fallback when storage is unavailable.
+        }
+      })();
+    </script>
     <!-- Privacy-friendly analytics by Plausible -->
     <script is:inline async src="https://plausible.io/js/pa-HYTeXgFrPqtC8mJaIc4c5.js"></script>
     <script is:inline>
@@ -32,14 +44,61 @@ const { title = SITE.name, description = SITE.description } = Astro.props;
       plausible.init();
     </script>
     <style is:global>
-      html {
+      :root {
+        --background: #fffff8;
+        --surface: #fff;
+        --surface-muted: #f7f7ef;
+        --text: #171713;
+        --text-muted: #5a5a50;
+        --border: #8d8d80;
+        --border-strong: #262621;
+        --border-subtle: #d8d8cc;
+        --link: #0000aa;
+        --link-visited: #6b288a;
+        --focus: #9b5200;
         color-scheme: light;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme]) {
+          --background: #171714;
+          --surface: #20201c;
+          --surface-muted: #282821;
+          --text: #ecece2;
+          --text-muted: #b8b8aa;
+          --border: #777769;
+          --border-strong: #d4d4c8;
+          --border-subtle: #45453b;
+          --link: #8cb4ff;
+          --link-visited: #d7a4eb;
+          --focus: #f1b45b;
+          color-scheme: dark;
+        }
+      }
+
+      :root[data-theme='dark'] {
+        --background: #171714;
+        --surface: #20201c;
+        --surface-muted: #282821;
+        --text: #ecece2;
+        --text-muted: #b8b8aa;
+        --border: #777769;
+        --border-strong: #d4d4c8;
+        --border-subtle: #45453b;
+        --link: #8cb4ff;
+        --link-visited: #d7a4eb;
+        --focus: #f1b45b;
+        color-scheme: dark;
+      }
+
+      html {
+        background: var(--background);
       }
 
       body {
         margin: 0;
-        background: #fffff8;
-        color: #111;
+        background: var(--background);
+        color: var(--text);
         font-family: Georgia, 'Times New Roman', Times, serif;
         font-size: 18px;
         line-height: 1.55;
@@ -52,9 +111,39 @@ const { title = SITE.name, description = SITE.description } = Astro.props;
       }
 
       header {
-        border-bottom: 1px solid #111;
+        border-bottom: 1px solid var(--border-strong);
         margin-bottom: 2rem;
         padding-bottom: 0.75rem;
+      }
+
+      .theme-controls {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 1rem;
+      }
+
+      .theme-toggle {
+        align-items: center;
+        background: transparent;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        color: var(--text-muted);
+        cursor: pointer;
+        display: inline-flex;
+        font: inherit;
+        font-size: 0.8rem;
+        gap: 0.4rem;
+        padding: 0.25rem 0.65rem;
+      }
+
+      .theme-toggle:hover {
+        border-color: var(--border-strong);
+        color: var(--text);
+      }
+
+      .theme-toggle__icon {
+        font-size: 0.95rem;
+        line-height: 1;
       }
 
       .site-header__links {
@@ -81,12 +170,18 @@ const { title = SITE.name, description = SITE.description } = Astro.props;
       }
 
       a {
-        color: #0000aa;
+        color: var(--link);
         text-decoration: underline;
       }
 
       a:visited {
-        color: #551a8b;
+        color: var(--link-visited);
+      }
+
+      a:focus-visible,
+      button:focus-visible {
+        outline: 2px solid var(--focus);
+        outline-offset: 3px;
       }
 
       p,
@@ -103,7 +198,7 @@ const { title = SITE.name, description = SITE.description } = Astro.props;
       }
 
       time {
-        color: #555;
+        color: var(--text-muted);
         font-size: 0.9rem;
         font-variant-numeric: tabular-nums;
       }
@@ -116,9 +211,29 @@ const { title = SITE.name, description = SITE.description } = Astro.props;
 
       pre {
         overflow-x: auto;
-        border: 1px solid #999;
-        background: #fff;
+        border: 1px solid var(--border);
+        background: var(--surface);
         padding: 0.75rem;
+      }
+
+      .astro-code,
+      .astro-code span {
+        color: var(--shiki-light) !important;
+        background-color: var(--shiki-light-bg) !important;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme]) .astro-code,
+        :root:not([data-theme]) .astro-code span {
+          color: var(--shiki-dark) !important;
+          background-color: var(--shiki-dark-bg) !important;
+        }
+      }
+
+      :root[data-theme='dark'] .astro-code,
+      :root[data-theme='dark'] .astro-code span {
+        color: var(--shiki-dark) !important;
+        background-color: var(--shiki-dark-bg) !important;
       }
 
       .code-block {
@@ -126,10 +241,10 @@ const { title = SITE.name, description = SITE.description } = Astro.props;
       }
 
       .code-block__title {
-        border: 1px solid #999;
+        border: 1px solid var(--border);
         border-bottom: 0;
-        background: #f7f7ef;
-        color: #333;
+        background: var(--surface-muted);
+        color: var(--text-muted);
         font-family: 'Courier New', Courier, monospace;
         font-size: 0.85rem;
         padding: 0.35rem 0.75rem;
@@ -155,15 +270,15 @@ const { title = SITE.name, description = SITE.description } = Astro.props;
         width: 2.5ch;
         margin-right: 1rem;
         padding-right: 0.75rem;
-        border-right: 1px solid #ddd;
-        color: #777;
+        border-right: 1px solid var(--border-subtle);
+        color: var(--text-muted);
         text-align: right;
         user-select: none;
       }
 
       blockquote {
-        border-left: 1px solid #777;
-        color: #333;
+        border-left: 1px solid var(--border);
+        color: var(--text-muted);
         margin-left: 0;
         padding-left: 1rem;
       }
@@ -180,7 +295,50 @@ const { title = SITE.name, description = SITE.description } = Astro.props;
   </head>
   <body>
     <main>
+      <div class="theme-controls">
+        <button class="theme-toggle" type="button" aria-label="Use dark theme">
+          <span class="theme-toggle__icon" aria-hidden="true">◐</span>
+          <span class="theme-toggle__label">Dark</span>
+        </button>
+      </div>
       <slot />
     </main>
+    <script is:inline>
+      (() => {
+        const toggle = document.querySelector('.theme-toggle');
+        const label = toggle?.querySelector('.theme-toggle__label');
+        const systemTheme = window.matchMedia('(prefers-color-scheme: dark)');
+
+        if (!(toggle instanceof HTMLButtonElement) || label === null || label === undefined) {
+          return;
+        }
+
+        const currentTheme = () =>
+          document.documentElement.dataset.theme ?? (systemTheme.matches ? 'dark' : 'light');
+
+        const updateToggle = () => {
+          const nextTheme = currentTheme() === 'dark' ? 'light' : 'dark';
+          const nextThemeName = `${nextTheme[0].toUpperCase()}${nextTheme.slice(1)}`;
+          toggle.setAttribute('aria-label', `Use ${nextTheme} theme`);
+          label.textContent = nextThemeName;
+        };
+
+        toggle.addEventListener('click', () => {
+          const theme = currentTheme() === 'dark' ? 'light' : 'dark';
+          document.documentElement.dataset.theme = theme;
+
+          try {
+            localStorage.setItem('theme', theme);
+          } catch {
+            // The selected theme still applies for the lifetime of this page.
+          }
+
+          updateToggle();
+        });
+
+        systemTheme.addEventListener('change', updateToggle);
+        updateToggle();
+      })();
+    </script>
   </body>
 </html>
