@@ -1,5 +1,6 @@
 ---
 title: You're Thinking About AuthZ Wrong
+description: Why growing authorization systems need relationships and policy decisions beyond scattered role checks and ownership conditionals.
 pubDate: 2026-07-05
 ---
 
@@ -165,4 +166,3 @@ Links:
 
 - [The Zanzibar Whitepaper, Annotated by Authzed](https://authzed.com/zanzibar)
 - [My toy zanzibar implementation in python](https://github.com/tylerchambers/zanzipy)
-

@@ -1,3 +1,4 @@
+import sitemap from '@astrojs/sitemap';
 import { defineConfig } from 'astro/config';
 
 const CODE_BLOCK_TITLE_PATTERN = /(?:^|\s)title=(?:"([^"]+)"|'([^']+)'|([^\s]+))/u;
@@ -6,6 +7,8 @@ const CODE_BLOCK_LINE_NUMBERS_DISABLED_PATTERN =
   /(?:^|\s)(?:noLineNumbers|lineNumbers=(?:"false"|'false'|false))(?=\s|$)/u;
 
 export default defineConfig({
+  site: 'https://tylerchambers.net',
+  integrations: [sitemap()],
   markdown: {
     shikiConfig: {
       themes: {

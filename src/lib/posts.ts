@@ -21,5 +21,6 @@ export function formatPostDate(post: BlogPost): string {
 }
 
 export function getPostHref(post: BlogPost): string {
-  return `/blog/${post.id}/`;
+  const encodedId = post.id.split('/').map(encodeURIComponent).join('/');
+  return `/blog/${encodedId}/`;
 }

@@ -33,6 +33,7 @@ Use this frontmatter shape:
 ```md
 ---
 title: My post
+description: A concise, unique summary of the post for feeds and search results.
 pubDate: 2026-07-03
 ---
 
@@ -46,6 +47,7 @@ Required fields:
 
 Optional fields:
 
+- `description`: a concise, unique summary used by RSS readers, search engines, and social previews. It falls back to the site description when omitted, though published posts should provide one.
 - `draft: true`: hides the post from the index and prevents a static route from being generated.
 
 Example draft:

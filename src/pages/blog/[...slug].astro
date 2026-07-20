@@ -1,7 +1,7 @@
 ---
 import { render } from 'astro:content';
 import { SITE } from '../../config/site';
-import { formatPostDate, getPublishedPosts, type BlogPost } from '../../lib/posts';
+import { formatPostDate, getPostHref, getPublishedPosts, type BlogPost } from '../../lib/posts';
 import Layout from '../../layouts/Layout.astro';
 
 export async function getStaticPaths() {
@@ -20,9 +20,31 @@ interface Props {
 const { post } = Astro.props;
 const { Content } = await render(post);
 const published = formatPostDate(post);
+const description = post.data.description ?? SITE.description;
+const postUrl = new URL(getPostHref(post), Astro.site ?? SITE.url);
+const structuredData = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: post.data.title,
+  description,
+  datePublished: post.data.pubDate.toISOString(),
+  mainEntityOfPage: postUrl.href,
+  url: postUrl.href,
+  author: {
+    '@type': 'Person',
+    name: SITE.name,
+    url: SITE.url,
+  },
+}).replaceAll('<', '\\u003c');
 ---
 
-<Layout title={`${post.data.title} — ${SITE.name}`} description={SITE.description}>
+<Layout
+  title={`${post.data.title} — ${SITE.name}`}
+  description={description}
+  type="article"
+  publishedTime={post.data.pubDate.toISOString()}
+>
+  <script type="application/ld+json" set:html={structuredData} is:inline />
   <article>
     <p><a href="/">← index</a></p>
     <h1>{post.data.title}</h1>

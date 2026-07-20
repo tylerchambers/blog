@@ -1,5 +1,6 @@
 ---
 title: Dependency Injection is About Seams
+description: Dependency injection is fundamentally about creating explicit, replaceable seams—not containers, decorators, or framework machinery.
 pubDate: 2026-07-03
 ---
 
