@@ -325,69 +325,6 @@ The compiler is enforcing rules that would otherwise be scattered throughout app
 
 This is what "make illegal states unrepresentable" looks like in ordinary TypeScript. There is no dependent type theory involved. We simply noticed that the domain was a state machine and modeled it as one.
 
-## Do Not Rebuild State Machines Libraries Already Own
-
-There is one important limit to this advice.
-
-One place application developers frequently encounter state machines is asynchronous data fetching. A simplified example might look like this:
-
-```ts
-type UserState =
-  | { status: "loading" }
-  | { status: "error"; error: Error }
-  | { status: "success"; user: User }
-```
-
-This is a perfectly reasonable type if you own the asynchronous operation.
-
-But in a React application using TanStack Query, writing it may be pointless.
-
-TanStack Query already owns that state machine.
-
-Code like:
-
-```ts
-const query = useQuery({
-  queryKey: ["user", userId],
-  queryFn: () => getUser(userId),
-})
-
-if (query.isPending) {
-  return <Spinner />
-}
-
-if (query.isError) {
-  return <ErrorMessage error={query.error} />
-}
-
-return <UserProfile user={query.data} />
-```
-
-is already consuming a state model provided by the library.
-
-Wrapping that result in another homemade:
-
-```ts
-type UserState =
-  | ...
-```
-
-usually adds ceremony rather than safety.
-
-In fact, the library's actual state machine is richer than the toy `loading | error | success` model. A query can have successful cached data while a background fetch is in progress. "Do I have data?" and "am I currently fetching?" are related questions but not identical ones.
-
-A naïve homemade model can easily erase those distinctions.
-
-The lesson is therefore not that every interesting piece of state deserves a new discriminated union.
-
-It is:
-
-> Model the state machine at the layer that owns it.
-
-If a library already provides a coherent state model, use it.
-
-If your domain contains mutually exclusive states and you own the model, encode those states directly rather than reconstructing them from flags.
-
 ## A Useful Smell
 
 I treat code like this as a smell:
