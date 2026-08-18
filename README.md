@@ -67,6 +67,11 @@ The post URL comes from the file path relative to `src/content/blog/`:
 - `src/content/blog/first-note.md` -> `/blog/first-note/`
 - `src/content/blog/systems/cache-notes.md` -> `/blog/systems/cache-notes/`
 
+Every published post is also available as its original Markdown source by adding `.md` to its slug:
+
+- `/blog/first-note/` -> `/blog/first-note.md`
+- `/blog/systems/cache-notes/` -> `/blog/systems/cache-notes.md`
+
 Posts are sorted newest first by `pubDate`.
 
 Markdown fenced code blocks are syntax highlighted with a light theme. Add `title="..."` for
@@ -96,6 +101,12 @@ Run Astro's type/content checks:
 
 ```sh
 pnpm check
+```
+
+Build the site and verify every published Markdown route:
+
+```sh
+pnpm test
 ```
 
 Run Biome formatting/lint checks:

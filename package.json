@@ -8,6 +8,7 @@
     "dev": "astro dev",
     "check": "astro check",
     "build": "astro check && astro build",
+    "test": "astro check && astro build && node --test tests/*.test.mjs",
     "preview": "astro preview",
     "format": "biome format --write .",
     "lint": "biome check ."

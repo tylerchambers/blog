@@ -1,7 +1,13 @@
 ---
 import { render } from 'astro:content';
 import { SITE } from '../../config/site';
-import { formatPostDate, getPostHref, getPublishedPosts, type BlogPost } from '../../lib/posts';
+import {
+  formatPostDate,
+  getPostHref,
+  getPostMarkdownHref,
+  getPublishedPosts,
+  type BlogPost,
+} from '../../lib/posts';
 import Layout from '../../layouts/Layout.astro';
 
 export async function getStaticPaths() {
@@ -46,7 +52,7 @@ const structuredData = JSON.stringify({
 >
   <script type="application/ld+json" set:html={structuredData} is:inline />
   <article>
-    <p><a href="/">← index</a></p>
+    <p><a href="/">← index</a> · <a href={getPostMarkdownHref(post)}>view Markdown</a></p>
     <h1>{post.data.title}</h1>
     <time datetime={post.data.pubDate.toISOString()}>{published}</time>
     <Content />

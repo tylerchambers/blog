@@ -24,3 +24,7 @@ export function getPostHref(post: BlogPost): string {
   const encodedId = post.id.split('/').map(encodeURIComponent).join('/');
   return `/blog/${encodedId}/`;
 }
+
+export function getPostMarkdownHref(post: BlogPost): string {
+  return `${getPostHref(post).slice(0, -1)}.md`;
+}
