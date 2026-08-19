@@ -265,7 +265,7 @@ It may be the diff.
 
 The agent proposes a change. The diff is the artifact you actually need to evaluate.
 
-This is why I built **diffpeek**.
+This is why I built [**diffpeek**](https://github.com/tylerchambers/diffpeek).
 
 I wanted a Git diff viewer optimized around the review loop rather than around passively reading patches.
 
