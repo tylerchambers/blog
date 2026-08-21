@@ -1,80 +1,57 @@
 # Tyler Chambers
 
-## Summary
+## Profile
 
-Senior Software Engineer with 10+ years of experience building secure web applications, backend platforms, and infrastructure, with staff-level scope across architecture and cross-functional delivery. Leads complex systems from domain modeling and database migrations through APIs, asynchronous workflows, React interfaces, testing, and production operations. Deep experience in TypeScript, Python, authorization, financial technology, Bitcoin custody, distributed systems, and reliability engineering.
+Backend and infrastructure engineer with 10+ years of experience building financial, infrastructure, and developer-facing systems in Python and TypeScript. Most of my work has involved taking complex backend projects from design through production: data models, APIs, asynchronous workflows, security boundaries, observability, and operational tooling.
 
-## Technical Skills
+I work primarily on systems where correctness and failure behavior matter—Bitcoin custody, authentication and authorization, infrastructure, and distributed application workflows. I also spend significant time building and thinking about AI agents, especially tool-using systems, execution environments, orchestration, and the engineering required to make probabilistic software reliable enough to use in production.
 
-- **Languages:** TypeScript, JavaScript, Python, Go, SQL, Bash, C++
-- **Web & Backend:** React, React Query, Node.js, Bun, Flask, REST APIs, background jobs, state machines, domain-driven design
-- **Data & Infrastructure:** PostgreSQL, Redis, Docker, Kubernetes, Helm, AWS, Linux, CI/CD, Git
-- **Architecture & Security:** System design, distributed systems, authentication, authorization and ACLs, public key infrastructure, secure software design, observability, performance, automated testing
-- **Leadership:** Technical strategy, architectural design, cross-functional delivery, project leadership, code review, engineering standards, documentation
+## Core Expertise
+
+**Backend & Application Engineering:** Python, Flask, FastAPI, TypeScript, Go, SQL, REST APIs, asynchronous workflows, domain modeling
+
+**Data & Infrastructure:** PostgreSQL, Redis, Kubernetes, AWS, Docker, Linux, CI/CD
+
+**Reliability & Security:** authentication and authorization, application security, Datadog APM, OpenTelemetry, Prometheus, Splunk, structured logging, auditing, performance analysis, failure handling
+
+**AI & Agent Systems:** LLM application architecture, tool-using agents, execution runtimes, orchestration, guardrails, evaluation, observability
 
 ## Experience
 
-### Senior Software Engineer, Unchained
+### Senior Software Engineer
+**Unchained** · Remote<br />
+**Mar 2022–Present**
 
-*March 2022 – Present*
+- Led the design and implementation of **Connections**, Unchained’s system for sharing Bitcoin public keys and vault access between clients. Owned the project from technical design and specification through database models, migrations, Python services, APIs, and React workflows, including sharing and revoking access across vault and lending products.
 
-- Lead staff-level architecture and delivery across a Python/Flask and React/TypeScript platform supporting Bitcoin custody, lending, trading, payments, and institutional account management.
-- Designed and implemented the Connections platform across its domain model, database migrations, backend services, APIs, authorization model, and production rollout; implemented the React interface from provided designs. Replaced role- and configuration-based key sharing with granular action- and ACL-based access to organizational keys and vaults.
-- Drove a cross-stack redesign of core Bitcoin wallet infrastructure, replacing legacy escrow and current/next-address assumptions with explicit product, wallet, slice, and lookahead abstractions. Increased the number of wallet addresses monitored in advance by 10x while enabling more flexible address generation and wallet lifecycle management.
-- Drove wallet provisioning for vaults, loans, and rekeys from synchronous HTTP requests to retryable asynchronous workflows with polling and explicit state transitions, improving resilience for long-running custody operations.
-- Built governed key-management workflows spanning change proposals, approval states, quorum validation, participant selection, and execution; extended shared, workspace, and proprietary keys across vault and loan products.
-- Hardened authentication and sensitive operations by eliminating credential-response oracles, correcting CAPTCHA and passkey bypass behavior, restoring state-machine-backed login session tracking, restricting risky uploads, and adding extensive regression coverage.
-- Delivered compliance and operational systems including append-only, state-machine-backed electronic consent and tax-document delivery preferences; coordinated implementation through product, legal review, backend services, user-facing workflows, and production rollout.
-- Improved performance and operability by batching vault-statement balance computation to reduce database round trips, adding production metrics and dashboards, and maintaining extensive backend and frontend test coverage; approximately 40% of meaningful code changes were tests.
+- Expanded Unchained wallets from single receive/change addresses to **gap-limit address lookaheads**, precomputing and monitoring addresses across both derivation paths for vault, loan, and other custody products. Reworked backend and UI assumptions that had previously treated wallets as having only a current and next address.
 
-### Software Engineer, Pizza Hut
+- Made **vault, loan, and rekey wallet provisioning asynchronous**, replacing blocking HTTP workflows with queued, retryable provisioning. This removed database-lock contention around shared Unchained keys and allowed concurrent provisioning requests to complete reliably.
 
-*June 2021 – March 2022*
+- Designed and implemented **Proprietary Keys**, allowing Unchained and external platform participants to register multiple Bitcoin keys and control which products each key may be used for. Built the underlying key-assignment model and application interfaces used to select eligible keys for vaults, loans, treasury operations, and related custody workflows.
 
-- Designed, implemented, and tested backend services and APIs for public key infrastructure using Python, Flask, Go, and Docker.
-- Refactored a LUKS key-retrieval service built with Flask, Nginx, and Docker, reducing an approximately 75% request failure rate to zero.
-- Built and maintained CI build and test pipelines, standardizing delivery across services.
-- Designed, documented, and led training for a virtual-machine-based golden-image workflow that replaced physical hardware and substantially reduced image-capture time and operational friction.
+- Worked extensively on **authentication and authorization security**, including access-control enforcement, CAPTCHA and passkey flows, login information-disclosure issues, and regression coverage for security-sensitive behavior.
 
-### IT Resident / Software Engineer, Google
+- Implemented **Datadog APM and structured event logging** across a production Flask application, replacing much of the application’s Prometheus-based observability. Instrumented latency and failure paths, managed high-cardinality telemetry, and turned previously silent failures into traceable events and operational dashboards.
 
-*2018 – 2020*
+### Software Engineer
+**Pizza Hut** · Louisville, KY (Hybrid)<br />
+**Jun 2021–Mar 2022**
 
-- Developed support-ticket routing software used by Google helpdesk staff worldwide, integrating ticket and scheduling systems to automatically reassign work based on service-level objectives and engineer availability.
-- Built a Go CLI for interacting with ticketing APIs and parsing operating-system and application logs from ticket attachments, improving support efficiency.
-- Provided remote engineering support for more than 100,000 globally distributed Debian-based cloud and physical workstations.
-- Led Linux and troubleshooting training for 15 new hires and advanced after-hours sessions attended by approximately 30 engineers.
-- Authored operational documentation that reduced resolution time for broken kernel modules after updates from hours to under 30 minutes.
+- Improved reliability of an internal **Python/Flask key-management service** that integrated with Fortanix for HSM-backed retrieval of LUKS encryption keys. Tuned uWSGI, Nginx, and application timeout behavior for long-running cryptographic operations, reducing request failures from roughly 75% to effectively zero; added unit tests and established CI build/test pipelines for a service that previously had little automated coverage.
 
-### Site Reliability Engineer – Borg Cluster, Google
+- Designed and documented a **virtualized golden-image capture workflow** to replace a process dependent on dedicated physical hardware. Validated the VM-based approach, documented the capture procedure, and trained engineers on the new workflow, reducing image-creation time and removing much of the hardware coordination required by the existing process.
 
-*July 2019 – September 2019*
+### IT Resident
+**Google**<br />
+**2018–2020**
 
-- Developed improvements to a Go, Python, and Protocol Buffers service that protected production compute clusters by requiring multifactor or multiparty authorization for safety overrides.
-- Expanded safety checks, audit logging, and operational visibility for override workflows.
-- Ported the service CLI from Python to Go, simplifying releases and reducing operational overhead.
+- Provided high-volume remote technical support for Google employees across the Americas, handling multiple concurrent support sessions and troubleshooting Linux desktops, developer workstations, networking, authentication, hardware, and internal tooling.
 
-### IT Support, Eastern Kentucky University
+- Led **Linux/Unix training for incoming IT Residents**, covering Google’s internal desktop Linux environment, command-line fundamentals, system troubleshooting, and common support issues. Created and maintained operational documentation for recurring workstation problems, including recovery procedures for NVIDIA driver failures on Linux developer machines.
 
-*2014 – 2017*
+#### Borg Cluster SRE — Engineering Rotation
 
-- Provided technical support to 15,000 students and 2,000 faculty members in a predominantly Windows-based environment.
-- Automated common macOS remediation workflows with AppleScript, reducing average support sessions from 30 minutes to 15 minutes.
+- Contributed production code to **SRSLY (Seriously), Borg’s safe-removal service**, used by SREs to coordinate potentially disruptive maintenance and removal operations across Google’s cluster infrastructure.
 
-## Open Source
-
-### Bitcoin Core — C++, Python, Bash
-
-- Standardized version-flag behavior across multiple binaries and improved warnings in the man-page generation workflow.
-- Enabled Python 3.8 lint rules and corrected invalid identity comparisons across the codebase.
-- Changed GUI behavior to warn when `settings.json` is unreadable rather than overwriting it.
-
-### btcsuite/btcd — Go
-
-- Fixed an error-message bug involving SegWit acceptance of compressed public keys.
-- Updated domain names to fully qualified domain names to eliminate ambiguous DNS resolution.
-
-## Education
-
-**BBA, Computer Information Systems, Cum Laude** — Eastern Kentucky University  
-Network Management Concentration; Honors Thesis: *Decentralizing DNS with Blockchain Technologies*
+- Extended the service’s safety checks and operator visibility around high-risk removal operations, incorporating additional cluster state into decision-making and beginning work toward stronger warnings and authorization controls for dangerous actions.
