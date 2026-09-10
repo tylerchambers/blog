@@ -22,4 +22,12 @@ These conflict with each other on purpose. A one-off script and a production ser
 
 Write them when the gap becomes visible. When the agent produces something you'd have done differently, add what you would have done to the relevant skill. Over time the skills cover most of your greenfield work, and the agent's output in a fresh project stops being an average of everyone's code.
 
+Track the skills in a repository of their own, separate from any project. They are personal tooling, not application code, and keeping them versioned means they survive project churn and can improve incrementally. Publish it so the skills CLI can install from it:
+
+```bash
+npx skills add tylerchambers/skills --skill tyler-typescript-style --global
+```
+
+This installs the skill into whichever agent you use and keeps a fresh project from starting with nothing. My own repository is at [tylerchambers/skills](https://github.com/tylerchambers/skills).
+
 If you're typing the same corrections into prompts repeatedly, that's the signal. Each repeated correction is a skill that doesn't exist yet.
